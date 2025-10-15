@@ -27,21 +27,11 @@ namespace DotNetCoreSqlDb.Controllers
         // The cache logic is added with the help of GitHub Copilot
         public async Task<IActionResult> Index()
         {
-            var todoItems = await _cache.GetAsync(_TodoItemsCacheKey);
-            if (todoItems != null)
-            {
-                _logger.LogInformation("Data from cache.");
-                var todoList = JsonConvert.DeserializeObject<List<Todo>>(Encoding.UTF8.GetString(todoItems));
-                return View(todoList);
-            }
-            else
-            {
-                _logger.LogInformation("Data from database.");
-                var todoList = await _context.Todo.ToListAsync();
-                var serializedTodoList = JsonConvert.SerializeObject(todoList);
-                await _cache.SetAsync(_TodoItemsCacheKey, Encoding.UTF8.GetBytes(serializedTodoList));
-                return View(todoList);
-            }
+            _logger.LogInformation("Data from database.");
+            var todoList = await _context.Todo.ToListAsync();
+            var serializedTodoList = JsonConvert.SerializeObject(todoList);
+            await _cache.SetAsync(_TodoItemsCacheKey, Encoding.UTF8.GetBytes(serializedTodoList));
+            return View(todoList);
         }
 
         // GET: Todos/Details/5

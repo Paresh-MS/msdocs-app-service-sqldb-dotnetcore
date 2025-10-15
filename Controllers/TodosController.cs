@@ -96,7 +96,7 @@ namespace DotNetCoreSqlDb.Controllers
                 await _context.SaveChangesAsync();
 
                 // Clear the todo items cache
-                await _cache.RemoveAsync(_TodoItemsCacheKey);
+                // await _cache.RemoveAsync(_TodoItemsCacheKey);
 
                 return RedirectToAction(nameof(Index));
             }
